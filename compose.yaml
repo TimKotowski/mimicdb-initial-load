@@ -1,0 +1,36 @@
+---
+services:
+  source:
+    image: postgres:17-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: source_mimicdb
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: source_mimicdb
+    healthcheck:
+      test: [ "CMD-SHELL", "sh -c 'pg_isready -U $POSTGRES_USER -d $POSTGRES_DB'" ]
+      interval: 10s
+      timeout: 5s
+      start_period: 15s
+      retries: 5
+  target:
+    image: postgres:17-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: target_mimicdb
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: target_mimicdb
+    healthcheck:
+      test: [ "CMD-SHELL", "sh -c 'pg_isready -U $POSTGRES_USER -d $POSTGRES_DB'" ]
+      interval: 10s
+      timeout: 5s
+      start_period: 15s
+      retries: 5
+#    volumes:
+#      - ./pg_hba.conf:/var/lib/pgsql/data/pg_hba.conf
+#    command:
+#      - "postgres"
+#      - "-c"
+#      - "wal_level=logical"
