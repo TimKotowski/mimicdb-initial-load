@@ -21,30 +21,9 @@ services:
       POSTGRES_PASSWORD: 12345
       POSTGRES_DB: postgres_source
       <<: [*mimic_source_db_config, *mimic_target_db_config]
-#    volumes:
-#      - ./volumes/docker-entrypoint-initdb:/var/postgres-entrypoint
-#    entrypoint: ["/bin/sh", "-c"]
-#    command:
-#      - |
-#        /usr/local/bin/docker-entrypoint.sh postgres &
-#        PG_PID=$!
-#
-#        while ! pg_isready -U postgres_source -d postgres_source; do
-#          echo "Waiting for PostgreSQL to be ready..."
-#          sleep 1
-#        done
-#        /var/postgres-entrypoint/create_target.sh
-#        wait $PG_PID
     healthcheck:
       test: [ "CMD-SHELL", "sh -c 'pg_isready -U $POSTGRES_USER -d $POSTGRES_DB'" ]
       interval: 10s
       timeout: 5s
       start_period: 15s
       retries: 5
-#  mimicdb-service:
-#      build:
-#        dockerfile: Dockerfile
-#        context: .
-#      depends_on:
-#        temporal:
-#          condition: service_healthy
