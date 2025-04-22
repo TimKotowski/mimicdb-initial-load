@@ -27,6 +27,7 @@ func main() {
 
 	sqldb := stdlib.OpenDBFromPool(pool)
 	db := bun.NewDB(sqldb, pgdialect.New())
+
 	// Add query logging for debugging
 	db.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
 
